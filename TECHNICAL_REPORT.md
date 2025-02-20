@@ -1,8 +1,9 @@
 ## Fine Tuning Large Language Models for Better Performance with Specific Programming Languages
 
 ### Abstract
-### Hyothesis
-### Experimental Setup
+### Intrudction
+### Method (Experimental Setup)
 ### Results
 ### Conclusion
-### Further Work
+### References
+### Appendix
