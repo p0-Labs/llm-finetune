@@ -3,6 +3,7 @@
 # huggingface-cli download meta-llama/Llama-3.2-1B-Instruct --exclude "original/*" --local-dir meta-llama/Llama-3.2-1B-Instruct
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
+import sys
 
 def get_device():
     d_opts = [('cuda', torch.cuda.is_available()), ('mps', torch.backends.mps.is_available()), ('cpu', True)]
@@ -10,7 +11,7 @@ def get_device():
     print(f'using device: {device}')
     return device
 
-def load_model(model_path: str):
+def load_model(model_path: str, device):
     print('loading model...')
     tokenizer = AutoTokenizer.from_pretrained(model_path)
     tokenizer.pad_token = tokenizer.eos_token
@@ -19,7 +20,7 @@ def load_model(model_path: str):
     print('model loaded!')
     return tokenizer, model
 
-def generate_chat_response(tokenizer, model, conversation, max_length=100):
+def generate_chat_response(tokenizer, model, conversation, device, max_length=100):
     print('generating response...')
     prompt = f"<s>[INST] {conversation} [/INST]"
     inputs = tokenizer(prompt, return_tensors='pt', padding=True).to(device)
@@ -37,9 +38,19 @@ def generate_chat_response(tokenizer, model, conversation, max_length=100):
 
     return tokenizer.decode(outputs[0], skip_special_tokens=True)
 
-if __name__ == '__main__':
+def main():
+    if sys.argv[1] == None:
+        print('must pass in model path!')
+        return
+
+    model_path = sys.argv[1]
+
     device = get_device()
-    tokenizer, model = load_model('/Users/ln/dev/meta-llama/Llama-3.2-1B-Instruct')
+    tokenizer, model = load_model(model_path, device)
+
     conversation = 'Write a function in python to detect the 13th Friday of a given month and year. The function should accept two parameters: the month (as a number) and the year (as a four-digit number). It should return True if the month contains a Friday the 13th, and False otherwise3.'
-    response = generate_chat_response(tokenizer, model, conversation, max_length=400)
+    response = generate_chat_response(tokenizer, model, conversation, device, max_length=400)
     print(response)
+
+if __name__ == '__main__':
+    main()
