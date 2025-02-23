@@ -31,6 +31,16 @@ LlamaForCausalLM(
 )
 ```
 
+### Llama-3.2-1B HumanEval
+single run humaneval score on mba m3 16gb:
+```
+total problems: 164
+solved problems: 44
+success rate: 26.83%
+total time: 507.79 seconds
+```
+(we literally just have to get better than that for an example)
+
 ### Benchmarking
 - needs to be like this repo: `https://github.com/openai/human-eval`
 - then we can just replace the human-eval python version for zig version
