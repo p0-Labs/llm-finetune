@@ -1,7 +1,7 @@
 ## notes
 
 ### LoRA
-- [https://medium.com/@tayyibgondal2003/loralow-rank-adaptation-of-large-language-models-33f9d9d48984](informative article on it)
+- https://medium.com/@tayyibgondal2003/loralow-rank-adaptation-of-large-language-models-33f9d9d48984
 - the rank (r) determins the size of the adapters. say you have weight matrix W that's (10,000x20,000) and you choose
 r = 8 then you split W into A and B that are (10,000x8) and (8x20,000) respectively such that if you multiply them, you
 get the original W size again.
