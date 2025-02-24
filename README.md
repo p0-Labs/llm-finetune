@@ -31,32 +31,6 @@ LlamaForCausalLM(
 )
 ```
 
-### Llama-3.2-1B (ollama) HumanEval
-single run humaneval score on mba m3 16gb:
-
-run 1:
-```
-total problems: 164
-solved problems: 44
-success rate: 26.83%
-total time: 507.79 seconds
-```
-
-run 2:
-```
-total problems: 164
-solved problems: 42
-success rate: 25.61%
-total time: 509.35 seconds
-```
-
-avg: 26.22% (43 solved problems)
-
-we literally just have to get better than that for an example, >= 30% would be ideal see:
-https://refact.ai/blog/2023/introducing-refact-code-llm/
-
-reached 25.7% on BFCL V2 per some source online
-
 ### Benchmarking
 - needs to be like this repo: `https://github.com/openai/human-eval`
 - then we can just replace the human-eval python version for zig version

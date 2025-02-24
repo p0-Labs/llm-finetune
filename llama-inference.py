@@ -19,7 +19,12 @@ def load_model(model_path: str, device):
 def generate_chat_response(tokenizer, model, prompt, device, max_length=100):
     print(f'prompt: {prompt}')
     print('generating response...\n')
-    inputs = tokenizer(prompt, return_tensors='pt', padding=True).to(device)
+
+    messages = [
+        {'role': 'user', 'content': prompt}
+    ]
+    formatted_prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_promp=True)
+    inputs = tokenizer(formatted_prompt, return_tensors='pt', padding=True).to(device)
 
     outputs = model.generate(
         **inputs,
@@ -32,15 +37,17 @@ def generate_chat_response(tokenizer, model, prompt, device, max_length=100):
         pad_token_id=tokenizer.pad_token_id
     )
 
-    return tokenizer.decode(outputs[0], skip_special_tokens=True)
+    generated_ids = outputs[0, inputs.input_ids.shape[1]:]
+    response = tokenizer.decode(generated_ids, skip_special_tokens=True)
+    return response
 
 def main():
     model_path = '../meta-llama/Llama-3.2-1B-Instruct'
     device = get_device()
     tokenizer, model = load_model(model_path, device)
 
-    prompt = 'Write a function in python to detect the 13th Friday of a given month and year. The function should accept two parameters: the month (as a number) and the year (as a four-digit number). It should return True if the month contains a Friday the 13th, and False otherwise. Just write the function.'
-    response = generate_chat_response(tokenizer, model, prompt, device, max_length=400)
+    prompt = 'write a python function to print out the first n fibonacci numbers. write the function so it runs recursively. only give me the function.'
+    response = generate_chat_response(tokenizer, model, prompt, device, max_length=200)
     print(response)
 
 if __name__ == '__main__':
