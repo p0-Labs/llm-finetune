@@ -1,9 +1,5 @@
-# pip install torch transformers protobuf litgpt
-# hugginface-cli login
-# huggingface-cli download meta-llama/Llama-3.2-1B-Instruct --exclude "original/*" --local-dir meta-llama/Llama-3.2-1B-Instruct
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
-import sys
 
 def get_device():
     d_opts = [('cuda', torch.cuda.is_available()), ('mps', torch.backends.mps.is_available()), ('cpu', True)]
@@ -15,14 +11,14 @@ def load_model(model_path: str, device):
     print('loading model...')
     tokenizer = AutoTokenizer.from_pretrained(model_path)
     tokenizer.pad_token = tokenizer.eos_token
-    tokenizer.padding_side = 'right'
+    tokenizer.pad_token_id = tokenizer.eos_token_id
     model = AutoModelForCausalLM.from_pretrained(model_path).to(device)
     print('model loaded!')
     return tokenizer, model
 
-def generate_chat_response(tokenizer, model, conversation, device, max_length=100):
-    print('generating response...')
-    prompt = f"<s>[INST] {conversation} [/INST]"
+def generate_chat_response(tokenizer, model, prompt, device, max_length=100):
+    print(f'prompt: {prompt}')
+    print('generating response...\n')
     inputs = tokenizer(prompt, return_tensors='pt', padding=True).to(device)
 
     outputs = model.generate(
@@ -39,17 +35,12 @@ def generate_chat_response(tokenizer, model, conversation, device, max_length=10
     return tokenizer.decode(outputs[0], skip_special_tokens=True)
 
 def main():
-    if sys.argv[1] == None:
-        print('must pass in model path!')
-        return
-
-    model_path = sys.argv[1]
-
+    model_path = '../meta-llama/Llama-3.2-1B-Instruct'
     device = get_device()
     tokenizer, model = load_model(model_path, device)
 
-    conversation = 'Write a function in python to detect the 13th Friday of a given month and year. The function should accept two parameters: the month (as a number) and the year (as a four-digit number). It should return True if the month contains a Friday the 13th, and False otherwise3.'
-    response = generate_chat_response(tokenizer, model, conversation, device, max_length=400)
+    prompt = 'Write a function in python to detect the 13th Friday of a given month and year. The function should accept two parameters: the month (as a number) and the year (as a four-digit number). It should return True if the month contains a Friday the 13th, and False otherwise. Just write the function.'
+    response = generate_chat_response(tokenizer, model, prompt, device, max_length=400)
     print(response)
 
 if __name__ == '__main__':

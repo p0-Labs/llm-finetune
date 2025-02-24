@@ -2,3 +2,5 @@
 tokens.txt
 results/
 meta-llama/
+Llama-3.2-1B-Instruct-ft/
+.DS_Store
