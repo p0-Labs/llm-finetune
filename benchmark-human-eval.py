@@ -24,7 +24,7 @@ def gen_response(prompt, endpoint='http://localhost:8000/generate'):
         'prompt': formatted_prompt,
         'temperature': 0.7,
         'top_p': 0.9,
-        'max_tokens': 400
+        'max_tokens': 600
     }
 
     try:
@@ -83,7 +83,7 @@ def benchmark(problems, use_canonical=False):
             result = check_correctness(problem, generated_code, timeout=3.0)
             if result['passed']:
                 solved += 1
-            print(f'problem {task_id}: {'Solved' if result['passed'] else 'Not solved'}')
+            print(f'problem {task_id}: {'Solved' if result['passed'] else 'Not solved'}, total solved: {solved}')
         except Exception as e:
             print(f'error processing problem {task_id}: {e}')
 

@@ -6,7 +6,8 @@ import uvicorn
 
 app = FastAPI()
 
-model_path = '../meta-llama/Llama-3.2-1B-Instruct'
+#model_path = '../meta-llama/Llama-3.2-1B-Instruct'
+model_path = 'Llama-3.2-1B-Instruct-ft'
 
 d_opts = [('cuda', torch.cuda.is_available()), ('mps', torch.backends.mps.is_available()), ('cpu', True)]
 device = next(device for device, available in d_opts if available)
@@ -16,7 +17,13 @@ print('loading model...')
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 tokenizer.pad_token_id = tokenizer.eos_token_id
 tokenizer.pad_token = tokenizer.eos_token
-model = AutoModelForCausalLM.from_pretrained(model_path).to(device)
+
+model = AutoModelForCausalLM.from_pretrained(
+        model_path,
+        torch_dtype=torch.float16,
+        device_map=device,
+)
+
 print('model loaded!')
 
 class GenerateRequest(BaseModel):
