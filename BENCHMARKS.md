@@ -33,13 +33,13 @@ params:
 ```
 'temperature': 0.7,
 'top_p': 0.9,
-'max_tokens': 100
+'max_tokens': 400
 ```
 
 run 1:
 ```
 total problems: 164
-solved problems: 31
-success rate: 18.90%
-total time: 810.95 seconds
+solved problems: 44
+success rate: 26.83%
+total time: 778.09 seconds
 ```

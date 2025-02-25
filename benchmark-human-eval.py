@@ -24,7 +24,7 @@ def gen_response(prompt, endpoint='http://localhost:8000/generate'):
         'prompt': formatted_prompt,
         'temperature': 0.7,
         'top_p': 0.9,
-        'max_tokens': 100
+        'max_tokens': 400
     }
 
     try:
